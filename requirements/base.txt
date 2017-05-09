@@ -1,0 +1,5 @@
+Django==1.10.3
+django-filter==1.0.2
+django-model-utils==2.6
+djangorestframework==3.6.2
+Markdown==2.6.8
