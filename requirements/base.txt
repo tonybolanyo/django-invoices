@@ -1,4 +1,5 @@
 Django==1.10.3
+django-countries==4.5
 django-filter==1.0.2
 django-model-utils==2.6
 djangorestframework==3.6.2

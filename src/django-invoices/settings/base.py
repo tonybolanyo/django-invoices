@@ -71,7 +71,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'abinvoices.urls'
+ROOT_URLCONF = 'django-invoices.urls'
 
 TEMPLATES = [
     {
@@ -89,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'abinvoices.wsgi.application'
+WSGI_APPLICATION = 'django-invoices.wsgi.application'
 
 
 # Password validation
