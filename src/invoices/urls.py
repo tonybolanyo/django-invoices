@@ -4,7 +4,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    url(r'^invoices/$', views.InvoiceList.as_view()),
+	url(r'^$', views.api_root),
+    url(r'^invoices/$', views.InvoiceList.as_view(), name='invoice-list'),
     url(r'^invoices/(?P<pk>\d+)/$', views.InvoiceDetail.as_view()),
 ]
 
