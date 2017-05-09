@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'invoices',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +71,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'invoices.urls'
+ROOT_URLCONF = 'abinvoices.urls'
 
 TEMPLATES = [
     {
@@ -87,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'invoices.wsgi.application'
+WSGI_APPLICATION = 'abinvoices.wsgi.application'
 
 
 # Password validation
