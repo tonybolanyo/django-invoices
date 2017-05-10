@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .models import Invoice
-from .serializers import InvoiceSerializer
+from .models import Invoice, InvoiceEntry
+from .serializers import InvoiceSerializer, InvoiceEntrySerializer
 
 
 @api_view(['GET'])
@@ -30,3 +30,21 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
+
+
+class InvoiceEntryList(generics.ListCreateAPIView):
+    """
+    List all the invoices (GET) or create a new one (POST)
+    """
+
+    queryset = InvoiceEntry.objects.all()
+    serializer_class = InvoiceEntrySerializer
+
+
+class InvoiceEntryDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update or delete an entry for an invoice.
+    """
+
+    queryset = Invoice.objects.all()
+    serializer_class = InvoiceEntrySerializer

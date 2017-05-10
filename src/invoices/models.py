@@ -2,6 +2,7 @@ import logging
 from datetime import date
 from decimal import Decimal
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
 
     """
-    Representación de la cabecera de una factura.
+    Invoice main data.
     """
 
     STATUS = Choices(
@@ -50,3 +51,19 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
 
     def str(self):
         return _('Invoice {number}').format(number=self.full_number)
+
+
+class InvoiceEntry(TimeStampedModel):
+
+    """
+    Entry for one product, service or item included in one invoice.
+    """
+
+    description = models.CharField(_('description'), max_length=1024)
+    unit = models.CharField(_('unit'), max_length=1024, blank=True, null=True)
+    quantity = models.DecimalField(
+        _('quantity'), max_digits=19, decimal_places=4,
+        validators=[MinValueValidator(0.0)])
+    unit_price = models.DecimalField(
+        _('unit price'), max_digits=19, decimal_places=4)
+    invoice = models.ForeignKey(Invoice, related_name='invoice_entries')
