@@ -23,6 +23,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         entries_data = validated_data.pop('invoice_entries')
         invoice = Invoice.objects.create(**validated_data)
+        assert(invoice is not None)
         for entry_data in entries_data:
             InvoiceEntry.objects.create(invoice=invoice, **entry_data)
         return invoice

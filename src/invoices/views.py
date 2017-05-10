@@ -15,13 +15,6 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
 
-    @list_route()
-    def entries(self, request):
-        print(self.args)
-        print(self.kwargs)
-        serializer = self.get_serializer(many=True)
-        return Response(serializer.data)
-
 
 class InvoiceEntryViewSet(viewsets.ModelViewSet):
     """
