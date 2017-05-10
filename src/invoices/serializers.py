@@ -7,7 +7,7 @@ class InvoiceEntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvoiceEntry
-        fields = ('description', 'unit', 'quantity', 'unit_price',)
+        fields = ('invoice', 'description', 'unit', 'quantity', 'unit_price',)
 
 
 class InvoiceSerializer(serializers.ModelSerializer):

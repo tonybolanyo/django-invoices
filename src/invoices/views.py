@@ -1,50 +1,33 @@
-from rest_framework import generics, mixins
-from rest_framework.decorators import api_view
+from rest_framework import viewsets
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 
 from .models import Invoice, InvoiceEntry
 from .serializers import InvoiceSerializer, InvoiceEntrySerializer
 
 
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'invoices': reverse('invoice-list', request=request, format=format),
-    })
-
-
-class InvoiceList(generics.ListCreateAPIView):
+class InvoiceViewSet(viewsets.ModelViewSet):
     """
-    List all the invoices (GET) or create a new one (POST)
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
     """
 
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
 
+    @list_route()
+    def entries(self, request):
+        print(self.args)
+        print(self.kwargs)
+        serializer = self.get_serializer(many=True)
+        return Response(serializer.data)
 
-class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
+
+class InvoiceEntryViewSet(viewsets.ModelViewSet):
     """
-    Retrieve, update or delete a invoice instance.
-    """
-
-    queryset = Invoice.objects.all()
-    serializer_class = InvoiceSerializer
-
-
-class InvoiceEntryList(generics.ListCreateAPIView):
-    """
-    List all the invoices (GET) or create a new one (POST)
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
     """
 
     queryset = InvoiceEntry.objects.all()
-    serializer_class = InvoiceEntrySerializer
-
-
-class InvoiceEntryDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update or delete an entry for an invoice.
-    """
-
-    queryset = Invoice.objects.all()
     serializer_class = InvoiceEntrySerializer

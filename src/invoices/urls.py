@@ -1,13 +1,15 @@
-from django.conf.urls import url
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import include, url
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
-urlpatterns = [
-    url(r'^$', views.api_root),
-    url(r'^invoices/$', views.InvoiceList.as_view(), name='invoice-list'),
-    url(r'^invoices/(?P<pk>\d+)/$', views.InvoiceDetail.as_view()),
-    url(r'^invoices/(?P<pk>\d+)/entries$', views.InvoiceEntryList.as_view()),
-]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'invoices', views.InvoiceViewSet)
+router.register(r'entries', views.InvoiceEntryViewSet)
+
+urlpatterns = [
+    # url(r'^$', views.api_root),
+    url(r'^', include(router.urls)),
+]
