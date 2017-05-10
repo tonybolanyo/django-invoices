@@ -26,17 +26,17 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
         ('paid', _('paid'))
     )
 
-    date = models.DateField('date', default=date.today)
-    number = models.IntegerField('number', default=0)
-    first_name = models.CharField('first name', max_length=200)
-    last_name = models.CharField('last name', max_length=200)
-    street = models.CharField('street', max_length=120)
-    city = models.CharField('city', max_length=120)
-    state = models.CharField('state or province', max_length=120)
-    zipcode = models.CharField('postal code', max_length=120)
-    country = CountryField('country', blank=True, blank_label='selecciona país')
-    vat_number = models.CharField('VAT number', max_length=15, blank=True)
-    email = email = models.EmailField('email', blank=True)
+    date = models.DateField(_('date'), default=date.today)
+    number = models.IntegerField(_('number'), default=0)
+    first_name = models.CharField(_('first name'), max_length=200)
+    last_name = models.CharField(_('last name'), max_length=200)
+    street = models.CharField(_('street'), max_length=120)
+    city = models.CharField(_('city'), max_length=120)
+    state = models.CharField(_('state or province'), max_length=120)
+    zipcode = models.CharField(_('postal code'), max_length=120)
+    country = CountryField(_('country'), blank=True, blank_label='selecciona país')
+    vat_number = models.CharField(_('VAT number'), max_length=15, blank=True)
+    email = email = models.EmailField(_('email'), blank=True)
 
     def full_number(self):
         return "{year}/{number:06}".format(
