@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from django_countries.fields import CountryField
-from model_utils import Choices
+from model_utils import Choices, FieldTracker
 from model_utils.models import (
     SoftDeletableModel, StatusModel, TimeStampedModel)
 
@@ -34,6 +34,7 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
     )
 
     date = models.DateField(_('date'), default=date.today)
+    year = models.IntegerField(_('year'), blank=True, null=True)
     number = models.IntegerField(_('number'), default=0)
     first_name = models.CharField(_('first name'), max_length=200)
     last_name = models.CharField(_('last name'), max_length=200)
@@ -50,6 +51,8 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
         default=PAYMENT_METHODS.cash, max_length=10)
     notes = models.TextField(_('notes'), blank=True)
 
+    tracker = FieldTracker()
+
     def full_number(self):
         return "{year}/{number:06}".format(
             year=self.date.year,
@@ -60,6 +63,7 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
         verbose_name = _('invoice')
         verbose_name_plural = _('invoices')
         ordering = ('-date', '-number')
+        unique_together = (('year', 'number'),)
 
     def __str__(self):
         return _('Invoice {year}/{number:06}').format(
@@ -67,13 +71,18 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
 
     def save(self, *args, **kwargs):
 
-        # get max number for invoce year
-        last_invoice = Invoice.objects.filter(
-            date__year=self.date.year).order_by('-number').first()
-        if last_invoice is None:
-            self.number = 1
-        else:
-            self.number = last_invoice.number + 1
+        # update year from invoice date
+        year = self.date.year
+        self.year = year
+        if self.tracker.has_changed('year'):
+            # get max number for invoce year
+            last_invoice = Invoice.objects.filter(
+                date__year=year).order_by('-number').first()
+            # update invoice number
+            if last_invoice is None:
+                self.number = 1
+            else:
+                self.number = last_invoice.number + 1
         return super().save(*args, **kwargs)
 
 
