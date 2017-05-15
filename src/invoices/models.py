@@ -69,12 +69,12 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
 
         # get max number for invoce year
         last_invoice = Invoice.objects.filter(
-            date__year=2017).order_by('-number').first()
+            date__year=self.date.year).order_by('-number').first()
         if last_invoice is None:
             self.number = 1
         else:
             self.number = last_invoice.number + 1
-        super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class InvoiceEntry(TimeStampedModel):

@@ -5,34 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from .models import Invoice
-
-
 User = get_user_model()
-
-
-class InvoiceModelTestCase(TestCase):
-    """Tests for Invoice class"""
-
-    def setUp(self):
-        """Define the test client and other test variables"""
-        first_name = 'Test name'
-        last_name = 'Test Last Name'
-        street = 'Street name, 33'
-        city = 'City name'
-        country = 'ES'
-        state = 'State name'
-        zipcode = 'ES46000'
-        self.invoice = Invoice(
-            first_name=first_name, last_name=last_name, street=street,
-            city=city, state=state, zipcode=zipcode)
-
-    def test_model_can_create_an_invoice(self):
-        """Invoice model can create an invoice"""
-        old_count = Invoice.objects.count()
-        self.invoice.save()
-        new_count = Invoice.objects.count()
-        self.assertNotEqual(old_count, new_count)
 
 
 class InvoiceViewSetTestCase(TestCase):
