@@ -7,7 +7,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from ..models import Invoice
+from ..models import Invoice, InvoiceEntry
 
 
 class InvoiceModelTestCase(TestCase):
@@ -56,3 +56,41 @@ class InvoiceModelTestCase(TestCase):
             zipcode=self.zipcode, date=datetime.date(2000, 5, 6))
         new_invoice.save()
         self.assertEqual(new_invoice.number, last_invoice.number+1)
+
+
+class InvoiceEntryModelTest(TestCase):
+
+    def setUp(self):
+        first_name = 'Test name'
+        last_name = 'Test Last Name'
+        street = 'Street name, 33'
+        city = 'City name'
+        country = 'ES'
+        state = 'State name'
+        zipcode = 'ES46000'
+        self.invoice = Invoice(
+            first_name=first_name, last_name=last_name,
+            street=street, city=city, state=state,
+            zipcode=zipcode)
+        self.invoice.save()
+
+    def test_can_create_invoice_entry(self):
+        """Can create invoice entry line"""
+        old_count = InvoiceEntry.objects.count()
+        entry = InvoiceEntry(invoice=self.invoice, description='Test entry')
+        entry.save()
+        new_count = InvoiceEntry.objects.count()
+        self.assertNotEqual(old_count, new_count)
+
+    def test_first_entry_has_first_position(self):
+        """First entry should have first position"""
+        entry = InvoiceEntry(invoice=self.invoice, description='Test entry')
+        entry.save()
+        self.assertEqual(entry.position, 1)
+
+    def test_has_total_calculation(self):
+        """Invoice entry has total calculation"""
+        entry = InvoiceEntry(invoice=self.invoice, description='Test entry',
+                             quantity=1.5, unit_price=2.5)
+        entry.save()
+        self.assertEqual(entry.total, 3.75)

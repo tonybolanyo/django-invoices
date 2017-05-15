@@ -92,11 +92,26 @@ class InvoiceEntry(TimeStampedModel):
     Entry for one product, service or item included in one invoice.
     """
 
+    position = models.IntegerField(_('position'), default=1)
     description = models.CharField(_('description'), max_length=1024)
     unit = models.CharField(_('unit'), max_length=1024, blank=True, null=True)
     quantity = models.DecimalField(
         _('quantity'), max_digits=19, decimal_places=4,
-        validators=[MinValueValidator(0.0)])
+        validators=[MinValueValidator(0.0)], default=1.0)
     unit_price = models.DecimalField(
-        _('unit price'), max_digits=19, decimal_places=4)
+        _('unit price'), max_digits=19, decimal_places=4, default=0.0)
     invoice = models.ForeignKey(Invoice, related_name='invoice_entries')
+
+    @property
+    def total(self):
+        return self.quantity * self.unit_price
+
+    class Meta:
+        verbose_name = _('invoice entry')
+        verbose_name_plural = _('invoice entries')
+        ordering = ('-invoice', 'position')
+        unique_together = (('position', 'invoice'),)
+
+    def __str__(self):
+        return '{pos} - {desc} - {total}'.format(
+            pos=self.position, desc=self.description, total=self.total)
