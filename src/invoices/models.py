@@ -26,6 +26,13 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
         ('paid', _('paid'))
     )
 
+    PAYMENT_METHODS = Choices(
+        ('cash', _('cash')),
+        ('transfer', _('bank transfer')),
+        ('card', _('credit card')),
+        ('paypal', _('paypal')),
+    )
+
     date = models.DateField(_('date'), default=date.today)
     number = models.IntegerField(_('number'), default=0)
     first_name = models.CharField(_('first name'), max_length=200)
@@ -34,23 +41,40 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
     city = models.CharField(_('city'), max_length=120)
     state = models.CharField(_('state or province'), max_length=120)
     zipcode = models.CharField(_('postal code'), max_length=120)
-    country = CountryField(_('country'), blank=True, blank_label='selecciona país')
+    country = CountryField(
+        _('country'), blank=True, blank_label=_('select country'))
     vat_number = models.CharField(_('VAT number'), max_length=15, blank=True)
-    email = email = models.EmailField(_('email'), blank=True)
+    email = models.EmailField(_('email'), blank=True)
+    payment_method = models.CharField(
+        _('payment method'), choices=PAYMENT_METHODS,
+        default=PAYMENT_METHODS.cash, max_length=10)
+    notes = models.TextField(_('notes'), blank=True)
 
     def full_number(self):
         return "{year}/{number:06}".format(
             year=self.date.year,
             number=self.number
-            )
+        )
 
     class Meta:
         verbose_name = _('invoice')
         verbose_name_plural = _('invoices')
         ordering = ('-date', '-number')
 
-    def str(self):
-        return _('Invoice {number}').format(number=self.full_number)
+    def __str__(self):
+        return _('Invoice {year}/{number:06}').format(
+            number=self.number, year=self.date.year)
+
+    def save(self, *args, **kwargs):
+
+        # get max number for invoce year
+        last_invoice = Invoice.objects.filter(
+            date__year=2017).order_by('-number').first()
+        if last_invoice is None:
+            self.number = 1
+        else:
+            self.number = last_invoice.number + 1
+        super().save(*args, **kwargs)
 
 
 class InvoiceEntry(TimeStampedModel):

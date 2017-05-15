@@ -18,7 +18,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = ('id', 'date', 'number', 'first_name', 'last_name', 'street',
                   'city', 'state', 'zipcode', 'country', 'vat_number', 'email',
-                  'invoice_entries',)
+                  'payment_method', 'notes', 'invoice_entries',)
 
     def create(self, validated_data):
         entries_data = validated_data.pop('invoice_entries')
