@@ -115,3 +115,14 @@ class InvoiceEntry(TimeStampedModel):
     def __str__(self):
         return '{pos} - {desc} - {total}'.format(
             pos=self.position, desc=self.description, total=self.total)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            print('new entry')
+            last_entry = InvoiceEntry.objects.filter(
+                invoice=self.invoice).order_by('position').last()
+            if last_entry is not None:
+                print(last_entry.position)
+                self.position = last_entry.position + 1
+            print(self.position)
+        super().save(*args, **kwargs)

@@ -94,3 +94,16 @@ class InvoiceEntryModelTest(TestCase):
                              quantity=1.5, unit_price=2.5)
         entry.save()
         self.assertEqual(entry.total, 3.75)
+
+    def test_position_automated_calculation(self):
+        """New entry has next position"""
+        entry_one = InvoiceEntry(
+            invoice=self.invoice, description='Test entry',
+            quantity=1.5, unit_price=2.5)
+        entry_one.save()
+        entry_two = InvoiceEntry(
+            invoice=self.invoice, description='Test entry',
+            quantity=1.5, unit_price=2.5)
+        entry_two.save()
+        self.assertEqual(entry_one.position, 1)
+        self.assertEqual(entry_two.position, 2)
