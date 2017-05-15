@@ -53,6 +53,7 @@ class Invoice(SoftDeletableModel, StatusModel, TimeStampedModel):
 
     tracker = FieldTracker()
 
+    @property
     def full_number(self):
         return "{year}/{number:06}".format(
             year=self.date.year,
