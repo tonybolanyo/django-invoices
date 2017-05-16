@@ -10,20 +10,24 @@ class InvoiceEntrySerializer(serializers.ModelSerializer):
         fields = ('invoice', 'description', 'unit', 'quantity', 'unit_price',)
 
 
+class InvoiceEntrySimpleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = InvoiceEntry
+        fields = ('position', 'description', 'unit', 'quantity', 'unit_price', 'total',)
+
+
 class InvoiceSerializer(serializers.ModelSerializer):
 
-    invoice_entries = InvoiceEntrySerializer(many=True)
+    """
+    Serialize only invoice head data, not including entries.
+    """
+
+    invoice_entries = InvoiceEntrySimpleSerializer(many=True, read_only=True)
 
     class Meta:
         model = Invoice
         fields = ('id', 'date', 'number', 'first_name', 'last_name', 'street',
                   'city', 'state', 'zipcode', 'country', 'vat_number', 'email',
                   'payment_method', 'notes', 'invoice_entries',)
-
-    def create(self, validated_data):
-        entries_data = validated_data.pop('invoice_entries')
-        invoice = Invoice.objects.create(**validated_data)
-        assert(invoice is not None)
-        for entry_data in entries_data:
-            InvoiceEntry.objects.create(invoice=invoice, **entry_data)
-        return invoice
+        read_only_fields = ('id', 'number',)
