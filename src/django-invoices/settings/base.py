@@ -160,3 +160,9 @@ REST_FRAMEWORK = {
     ),
     'PAGE_SIZE': 10,
 }
+
+# Logo image full path.
+# Asumes first path in STATICFILES_DIRS
+# has the logo inside
+INVOICES_LOGO_FILENAME = os.path.join(
+    STATICFILES_DIRS[0], 'images', 'logo.jpg')
