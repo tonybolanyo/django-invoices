@@ -1,0 +1,30 @@
+language: python
+python:
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.5-dev" # 3.5 development branch
+  - "3.6"
+  - "3.6-dev" # 3.6 development branch
+  - "3.7-dev" # 3.7 development branch
+  - "nightly" # currently points to 3.7-dev
+
+env:
+  - DJANGO_SETTINGS_MODULE=abdownloads.settings.local
+  - DJANGO=Django==1.10
+  - DJANGO=Django==1.11
+  - DJANGO=Django
+
+before_script: cd src
+
+# command to install dependencies
+install:
+  - pip install -r requirements/local.txt
+  - pip install $DJANGO
+  - pip install coveralls
+  
+# command to run tests
+script: pytest
+
+after_success: coveralls

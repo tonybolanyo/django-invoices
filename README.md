@@ -1,5 +1,7 @@
 # django-invoices
 
+[![Build Status](https://travis-ci.org/tonybolanyo/django-invoices.svg?branch=master)](https://travis-ci.org/tonybolanyo/django-invoices) [![Coverage Status](https://coveralls.io/repos/github/tonybolanyo/django-invoices/badge.svg?branch=master)](https://coveralls.io/github/tonybolanyo/django-invoices?branch=master)
+
 ## Installation
 
 First of all you need to download last version from the github repository
