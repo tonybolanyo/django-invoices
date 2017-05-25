@@ -11,7 +11,7 @@ python:
   - "nightly" # currently points to 3.7-dev
 
 env:
-  - DJANGO_SETTINGS_MODULE=abdownloads.settings.local
+  - DJANGO_SETTINGS_MODULE=django-invoices.settings.test
   - DJANGO=Django==1.10
   - DJANGO=Django==1.11
   - DJANGO=Django
