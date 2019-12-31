@@ -101,7 +101,7 @@ class InvoiceEntry(TimeStampedModel):
         validators=[MinValueValidator(0.0)], default=1.0)
     unit_price = models.DecimalField(
         _('unit price'), max_digits=19, decimal_places=4, default=0.0)
-    invoice = models.ForeignKey(Invoice, related_name='invoice_entries')
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='invoice_entries')
 
     @property
     def total(self):
