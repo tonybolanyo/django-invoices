@@ -12,8 +12,11 @@ python:
 
 env:
   - DJANGO_SETTINGS_MODULE=django-invoices.settings.test
-  - DJANGO=Django==1.10
-  - DJANGO=Django==1.11
+  - DJANGO=Django==2.0
+  - DJANGO=Django==2.1
+  - DJANGO=Django==2.2
+  - DJANGO=Django==2.2.9
+  - DJANGO=Django==3.0
   - DJANGO=Django
 
 before_script: cd src
